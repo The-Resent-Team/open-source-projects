@@ -26,15 +26,13 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
-import javax.inject.Inject
 
-class EaglercraftBuildSuiteExtensionImpl
-@Inject constructor(
+class EaglercraftBuildSuiteExtensionImpl(
     nameString: String,
     objects: ObjectFactory
 ) : EaglercraftBuildSuiteExtension {
-    final override var name: Property<String> = objects.property(String::class.java)
-    final override var target: Property<EaglercraftBuildTarget> = objects.property(EaglercraftBuildTarget::class.java)
+    override var name: Property<String> = objects.property(String::class.java)
+    override var target: Property<EaglercraftBuildTarget> = objects.property(EaglercraftBuildTarget::class.java)
 
     // epk things
     override var epkSources: DirectoryProperty = objects.directoryProperty()
@@ -51,6 +49,10 @@ class EaglercraftBuildSuiteExtensionImpl
 
     init {
         this.name.set(nameString)
+    }
+
+    override fun getJs(): EaglercraftBuildSuiteJSExtension {
+        return jsExtension
     }
 
     override fun js(action: Action<EaglercraftBuildSuiteJSExtension>) {

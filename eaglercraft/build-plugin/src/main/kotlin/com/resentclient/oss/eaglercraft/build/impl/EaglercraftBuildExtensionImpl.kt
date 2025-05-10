@@ -28,6 +28,9 @@ import javax.inject.Inject
 class EaglercraftBuildExtensionImpl @Inject constructor(objectFactory: ObjectFactory) : EaglercraftBuildExtension {
     private val suites: NamedDomainObjectContainer<EaglercraftBuildSuiteExtension> =
         objectFactory.domainObjectContainer(EaglercraftBuildSuiteExtension::class.java)
+        { name ->
+            EaglercraftBuildSuiteExtensionImpl(name, objectFactory)
+        }
 
     override fun getSuites(): NamedDomainObjectContainer<EaglercraftBuildSuiteExtension> {
         return suites
