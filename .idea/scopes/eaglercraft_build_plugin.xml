@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="eaglercraft-build-plugin" pattern="file[resent-open-source-projects.eaglercraft.build-plugin.main]:java/com/resentclient/oss/eaglercraft/build//*" />
+</component>
