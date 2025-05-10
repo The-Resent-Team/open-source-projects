@@ -19,41 +19,6 @@
 package com.resentclient.oss.eaglercraft.build;
 
 import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildPlugin;
-import com.resentclient.oss.eaglercraft.build.tasks.CompileEpkTask;
-import com.resentclient.oss.eaglercraft.build.tasks.MakeOfflineDownloadTask;
-import com.resentclient.oss.eaglercraft.build.tasks.MakeSignedClientTask;
-import org.gradle.api.Project;
-import org.gradle.api.tasks.TaskProvider;
 
 public class EaglercraftBuildPluginImpl implements EaglercraftBuildPlugin {
-    private Project project;
-
-    @Override
-    public void apply(Project project) {
-        this.project = project;
-
-        EaglercraftBuildPlugin.super.apply(project);
-    }
-
-    @SuppressWarnings("removal")
-    @Override
-    public void registerJavascriptSuite(String name, String javascriptGeneratorTaskName) {
-        String nameCapitalized = name.substring(0, 1).toUpperCase() + name.substring(1);
-
-        String compileEpkTaskName = "compile" + nameCapitalized + "Epk";
-        String makeOfflineDownloadTaskName = "make" + nameCapitalized + "OfflineDownload";
-        String makeSignedClientTaskName = "make" + nameCapitalized + "SignedClient";
-
-        TaskProvider<CompileEpkTask> compileEpkTask = this.project.getTasks().register(compileEpkTaskName, CompileEpkTask.class);
-
-        this.project.getTasks().register(makeOfflineDownloadTaskName, MakeOfflineDownloadTask.class, (task) -> {
-            task.dependsOn(compileEpkTask);
-            task.dependsOn(javascriptGeneratorTaskName);
-        });
-
-        this.project.getTasks().register(makeSignedClientTaskName, MakeSignedClientTask.class, (task) -> {
-            task.dependsOn(compileEpkTask);
-            task.dependsOn(javascriptGeneratorTaskName);
-        });
-    }
 }

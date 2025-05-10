@@ -27,6 +27,4 @@ public interface EaglercraftBuildPlugin extends Plugin<Project> {
     default void apply(Project project) {
         project.getPlugins().apply(EaglercraftBuildPluginImpl.class);
     }
-
-    void registerJavascriptSuite(String name, String javascriptGeneratorTaskName);
 }
