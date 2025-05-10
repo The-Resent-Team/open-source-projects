@@ -39,9 +39,10 @@ class EaglercraftBuildPluginImpl : EaglercraftBuildPlugin {
                 when (suite.target.get()) {
                     EaglercraftBuildTarget.JAVASCRIPT -> {
                         val jsConfig: EaglercraftBuildSuiteJSExtension = suite.getJs()
+                        val capitalizedName: String = suite.name.get().replaceFirstChar { it.uppercase() }
 
-                        val compileEpkTaskName: String = "compile${suite.name.get()}Epk"
-                        val makeOfflineDownloadTaskName: String = "make${suite.name.get()}OfflineDownload"
+                        val compileEpkTaskName: String = "compile${capitalizedName}Epk"
+                        val makeOfflineDownloadTaskName: String = "make${capitalizedName}OfflineDownload"
 
                         val compileEpkTask: TaskProvider<CompileEpkTask> =
                             project.tasks.register(compileEpkTaskName, CompileEpkTask::class.java) { task ->

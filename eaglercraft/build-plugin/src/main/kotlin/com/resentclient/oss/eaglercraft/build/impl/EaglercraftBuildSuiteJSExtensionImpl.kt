@@ -26,9 +26,13 @@ import javax.inject.Inject
 class EaglercraftBuildSuiteJSExtensionImpl @Inject constructor(
     objects: ObjectFactory
 ) : EaglercraftBuildSuiteJSExtension {
-    override val offlineDownloadTemplate: RegularFileProperty = objects.fileProperty()
-    override val eaglerAssets: RegularFileProperty = objects.fileProperty()
-    override val mainOutput: RegularFileProperty = objects.fileProperty()
-    override val internationalOutput: RegularFileProperty = objects.fileProperty()
-    override val languageMetadata: RegularFileProperty = objects.fileProperty()
+    override var offlineDownloadTemplate: RegularFileProperty = objects.fileProperty()
+        set(value) = field.set(value)
+    override var eaglerAssets: RegularFileProperty = objects.fileProperty()
+        set(value) = field.set(value)
+    override var mainOutput: RegularFileProperty = objects.fileProperty()
+        set(value) = field.set(value)
+    override var internationalOutput: RegularFileProperty = objects.fileProperty()
+        set(value) = field.set(value)
+    override var languageMetadata: RegularFileProperty = objects.fileProperty()
 }
