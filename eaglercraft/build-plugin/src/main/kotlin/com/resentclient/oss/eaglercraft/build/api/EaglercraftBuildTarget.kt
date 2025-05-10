@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.resentclient.oss.eaglercraft.build;
+package com.resentclient.oss.eaglercraft.build.api
 
-import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildPlugin;
-
-public class EaglercraftBuildPluginImpl implements EaglercraftBuildPlugin {
+enum class EaglercraftBuildTarget {
+    JAVASCRIPT,
+    WASM_GC
 }

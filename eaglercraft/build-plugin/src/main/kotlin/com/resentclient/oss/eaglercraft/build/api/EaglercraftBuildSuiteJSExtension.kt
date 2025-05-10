@@ -16,15 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.resentclient.oss.eaglercraft.build.api;
+package com.resentclient.oss.eaglercraft.build.api
 
-import com.resentclient.oss.eaglercraft.build.EaglercraftBuildPluginImpl;
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
+import org.gradle.api.file.RegularFileProperty
 
-public interface EaglercraftBuildPlugin extends Plugin<Project> {
-    @Override
-    default void apply(Project project) {
-        project.getPlugins().apply(EaglercraftBuildPluginImpl.class);
-    }
+interface EaglercraftBuildSuiteJSExtension {
+    val offlineDownloadTemplate: RegularFileProperty
+    val eaglerAssets: RegularFileProperty
+    val mainOutput: RegularFileProperty
+    val internationalOutput: RegularFileProperty
+    val languageMetadata: RegularFileProperty
 }

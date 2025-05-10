@@ -3,6 +3,7 @@ plugins {
     `maven-publish`
 
     id("java")
+    kotlin("jvm")
 }
 
 extra["projectGroup"] = project.properties["resent.oss.eaglecraft.build.project.group"]
@@ -19,6 +20,7 @@ repositories {
 dependencies {
     implementation("com.jcraft:jzlib:1.1.3")
     implementation("org.tukaani:xz:1.10")
+    implementation(kotlin("stdlib-jdk8"))
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -47,4 +49,8 @@ publishing {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain(17)
 }
