@@ -53,6 +53,7 @@ class EaglercraftBuildPluginImpl : EaglercraftBuildPlugin {
                         val makeOfflineDownloadTask: TaskProvider<MakeOfflineDownloadTask> =
                             project.tasks.register(makeOfflineDownloadTaskName, MakeOfflineDownloadTask::class.java) { task ->
                                 task.dependsOn(suite.sourceGeneratorTaskName.get())
+                                task.dependsOn(compileEpkTask)
 
                                 task.offlineDownloadTemplate.convention(jsConfig.offlineDownloadTemplate)
                                 task.javascriptSource.convention(suite.sourceGeneratorOutput)
