@@ -6,8 +6,8 @@ plugins {
     kotlin("jvm")
 }
 
-extra["projectGroup"] = project.properties["resent.oss.eaglecraft.build.project.group"]
-extra["projectVersion"] = project.properties["resent.oss.eaglecraft.build.project.version"]
+extra["projectGroup"] = project.properties["resent.oss.eaglercraft.build.project.group"]
+extra["projectVersion"] = project.properties["resent.oss.eaglercraft.build.project.version"]
 extra["artifactId"] = "plugin"
 
 group = extra["projectGroup"] as String
@@ -29,7 +29,7 @@ dependencies {
 gradlePlugin {
     plugins {
         create("eaglercraftBuildPlugin") {
-            id = "com.resentclient.oss.eaglercraft.build"
+            id = project.properties["resent.oss.eaglercraft.build.project.plugin.id"] as String
             implementationClass = "com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildPlugin"
         }
     }
