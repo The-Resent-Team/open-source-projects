@@ -18,6 +18,7 @@
 
 package com.resentclient.oss.eaglercraft.build.tasks.wasm.internal
 
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.*
 import org.jetbrains.annotations.ApiStatus
@@ -27,11 +28,9 @@ abstract class CompileWasmBootstrapTask : JavaExec() {
     @get:InputFile
     abstract val closureCompiler: RegularFileProperty
 
-    @get:InputFile
-    abstract val externs: RegularFileProperty
-
-    @get:InputFile
-    abstract val main: RegularFileProperty
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val closureInputFiles: ConfigurableFileCollection
 
     @get:OutputFile
     abstract val output: RegularFileProperty
@@ -45,10 +44,8 @@ abstract class CompileWasmBootstrapTask : JavaExec() {
             "--isolation_mode", "IIFE"
         )
 
-        val sourceJavascriptFiles: List<String> = listOf(
-            externs, main
-        ).flatMap {
-            listOf("--js", it.get().asFile.absolutePath)
+        val sourceJavascriptFiles: List<String> = closureInputFiles.flatMap {
+            listOf("--js", it.absolutePath)
         }
 
         val output: List<String> = listOf(

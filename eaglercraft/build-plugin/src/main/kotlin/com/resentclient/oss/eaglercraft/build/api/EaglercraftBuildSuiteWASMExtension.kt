@@ -19,14 +19,13 @@
 
 package com.resentclient.oss.eaglercraft.build.api
 
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.provider.ListProperty
-import java.io.File
 
 interface EaglercraftBuildSuiteWASMExtension {
     val closureCompiler: RegularFileProperty
-    val closureInputFiles: ListProperty<File>
+    val closureInputFiles: ConfigurableFileCollection
     val runtimeOutput: RegularFileProperty
 
     val epwSource: RegularFileProperty
