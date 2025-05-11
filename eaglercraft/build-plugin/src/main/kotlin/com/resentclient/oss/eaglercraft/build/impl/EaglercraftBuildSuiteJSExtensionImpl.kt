@@ -25,13 +25,9 @@ import org.gradle.api.model.ObjectFactory
 open class EaglercraftBuildSuiteJSExtensionImpl(
     objects: ObjectFactory,
 ) : EaglercraftBuildSuiteJSExtension {
-    override var sourceGeneratorOutput: RegularFileProperty =
-        objects.fileProperty()
-    override var offlineDownloadTemplate: RegularFileProperty = objects.fileProperty()
-        set(value) = field.set(value)
-    override var mainOutput: RegularFileProperty = objects.fileProperty()
-        set(value) = field.set(value)
-    override var internationalOutput: RegularFileProperty = objects.fileProperty()
-        set(value) = field.set(value)
-    override var languageMetadata: RegularFileProperty = objects.fileProperty()
+    override val sourceGeneratorOutput: RegularFileProperty = objects.fileProperty()
+    override val offlineDownloadTemplate: RegularFileProperty = objects.fileProperty()
+    override val mainOutput: RegularFileProperty = objects.fileProperty()
+    override val internationalOutput: RegularFileProperty = objects.fileProperty()
+    override val languageMetadata: RegularFileProperty = objects.fileProperty()
 }

@@ -32,21 +32,21 @@ class EaglercraftBuildSuiteExtensionImpl(
     nameString: String,
     objects: ObjectFactory
 ) : EaglercraftBuildSuiteExtension {
-    override var name: Property<String> = objects.property(String::class.java)
-    override var target: Property<EaglercraftBuildTarget> = objects.property(EaglercraftBuildTarget::class.java)
+    override val name: Property<String> = objects.property(String::class.java)
+    override val target: Property<EaglercraftBuildTarget> = objects.property(EaglercraftBuildTarget::class.java)
 
     // epk things
-    override var epkSources: DirectoryProperty = objects.directoryProperty()
-    override var epkOutput: RegularFileProperty = objects.fileProperty()
+    override val epkSources: DirectoryProperty = objects.directoryProperty()
+    override val epkOutput: RegularFileProperty = objects.fileProperty()
 
     // source generators
-    override var sourceGeneratorTaskName: Property<String> = objects.property(String::class.java)
+    override val sourceGeneratorTaskName: Property<String> = objects.property(String::class.java)
 
     // js
-    private var jsExtension: EaglercraftBuildSuiteJSExtension = EaglercraftBuildSuiteJSExtensionImpl(objects)
+    private val jsExtension: EaglercraftBuildSuiteJSExtension = EaglercraftBuildSuiteJSExtensionImpl(objects)
 
     // wasm
-    private var wasmExtension: EaglercraftBuildSuiteWASMExtension = EaglercraftBuildSuiteWasmExtensionImpl(objects)
+    private val wasmExtension: EaglercraftBuildSuiteWASMExtension = EaglercraftBuildSuiteWasmExtensionImpl(objects)
 
     init {
         this.name.set(nameString)
