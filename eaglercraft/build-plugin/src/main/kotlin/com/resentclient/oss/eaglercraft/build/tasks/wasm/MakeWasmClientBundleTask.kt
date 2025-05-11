@@ -35,18 +35,20 @@ abstract class MakeWasmClientBundleTask : DefaultTask() {
     abstract val epwMeta: RegularFileProperty
 
     @get:OutputDirectory
-    abstract val outputDir: DirectoryProperty
+    abstract val clientBundleOutput: DirectoryProperty
 
     @TaskAction
     fun makeClientBundle() {
         try {
-            MakeWASMClientBundle.main(arrayOf(
-                epwSource.get().asFile.absolutePath,
-                epwMeta.get().asFile.absolutePath,
-                outputDir.get().asFile.absolutePath
-            ))
+            MakeWASMClientBundle.main(
+                arrayOf(
+                    epwSource.get().asFile.absolutePath,
+                    epwMeta.get().asFile.absolutePath,
+                    clientBundleOutput.get().asFile.absolutePath
+                )
+            )
         } catch (e: Exception) {
-            throw GradleException(e.message!!, e)
+            throw GradleException(e.message ?: "Failed making wasm client bundle!", e)
         }
     }
 }

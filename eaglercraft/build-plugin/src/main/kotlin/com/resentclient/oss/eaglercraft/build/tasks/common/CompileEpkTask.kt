@@ -28,22 +28,22 @@ import java.io.IOException
 abstract class CompileEpkTask : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     @get:InputDirectory
-    abstract val sources: DirectoryProperty
+    abstract val epkSources: DirectoryProperty
 
     @get:OutputFile
-    abstract val output: RegularFileProperty
+    abstract val epkOutput: RegularFileProperty
 
     @TaskAction
     fun compileEpk() {
         try {
             CompilePackage.main(
                 arrayOf(
-                    sources.get().asFile.absolutePath,
-                    output.get().asFile.absolutePath
+                    epkSources.get().asFile.absolutePath,
+                    epkOutput.get().asFile.absolutePath
                 )
             )
         } catch (e: IOException) {
-            throw GradleException(e.message!!, e)
+            throw GradleException(e.message ?: "Failed compiling EPK!", e)
         }
     }
 }

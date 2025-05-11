@@ -22,32 +22,14 @@ import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteWASMExten
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ListProperty
+import java.io.File
 
 open class EaglercraftBuildSuiteWasmExtensionImpl(
     objects: ObjectFactory
 ) : EaglercraftBuildSuiteWASMExtension {
     override val closureCompiler: RegularFileProperty = objects.fileProperty()
-    override val externs: RegularFileProperty = objects.fileProperty()
-    override val eagRuntimeUtil: RegularFileProperty = objects.fileProperty()
-    override val eagRuntimeMain: RegularFileProperty = objects.fileProperty()
-    override val platformApplication: RegularFileProperty = objects.fileProperty()
-    override val platformAssets: RegularFileProperty = objects.fileProperty()
-    override val platformAudio: RegularFileProperty = objects.fileProperty()
-    override val platformFilesystem: RegularFileProperty = objects.fileProperty()
-    override val platformInput: RegularFileProperty = objects.fileProperty()
-    override val platformNetworking: RegularFileProperty = objects.fileProperty()
-    override val platformOpenGL: RegularFileProperty = objects.fileProperty()
-    override val platformRuntime: RegularFileProperty = objects.fileProperty()
-    override val platformScreenRecord: RegularFileProperty = objects.fileProperty()
-    override val platformVoiceClient: RegularFileProperty = objects.fileProperty()
-    override val platformWebRTC: RegularFileProperty = objects.fileProperty()
-    override val platformWebView: RegularFileProperty = objects.fileProperty()
-    override val clientPlatformSingleplayer: RegularFileProperty = objects.fileProperty()
-    override val serverPlatformSingleplayer: RegularFileProperty = objects.fileProperty()
-    override val wasmBufferAllocator: RegularFileProperty = objects.fileProperty()
-    override val webmDurationFix: RegularFileProperty = objects.fileProperty()
-    override val teavmRuntime: RegularFileProperty = objects.fileProperty()
-    override val eagEntryPoint: RegularFileProperty = objects.fileProperty()
+    override val closureInputFiles: ListProperty<File> = objects.listProperty(File::class.java)
     override val runtimeOutput: RegularFileProperty = objects.fileProperty()
 
     override val epwSource: RegularFileProperty = objects.fileProperty()

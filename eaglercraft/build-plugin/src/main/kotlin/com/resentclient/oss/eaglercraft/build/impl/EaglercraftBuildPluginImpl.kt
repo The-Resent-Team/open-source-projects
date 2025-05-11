@@ -23,6 +23,7 @@ import com.resentclient.oss.eaglercraft.build.tasks.common.CompileEpkTask
 import com.resentclient.oss.eaglercraft.build.tasks.js.MakeOfflineDownloadTask
 import com.resentclient.oss.eaglercraft.build.tasks.wasm.CompileWasmRuntimeTask
 import com.resentclient.oss.eaglercraft.build.tasks.wasm.MakeWasmClientBundleTask
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
@@ -43,6 +44,9 @@ open class EaglercraftBuildPluginImpl : Plugin<Project> {
                     EaglercraftBuildTarget.WASM_GC -> {
                         registerWasmSuite(project, suite)
                     }
+                    null -> {
+                        throw GradleException("Unknown eaglercraft build target ${suite.target.get()}")
+                    }
                 }
             }
         }
@@ -60,8 +64,8 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
         project.tasks.register(compileEpkTaskName, CompileEpkTask::class.java) { task ->
             task.group = "eaglercraft build"
 
-            task.sources.convention(suite.epkSources)
-            task.output.convention(suite.epkOutput)
+            task.epkSources.convention(suite.epkSources)
+            task.epkOutput.convention(suite.epkOutput)
         }
 
     val makeOfflineDownloadTask: TaskProvider<MakeOfflineDownloadTask> =
@@ -73,7 +77,7 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
 
             task.offlineDownloadTemplate.convention(jsConfig.offlineDownloadTemplate)
             task.javascriptSource.convention(suite.sourceGeneratorOutput)
-            task.eaglerAssets.convention(compileEpkTask.get().output)
+            task.eaglerAssets.convention(compileEpkTask.get().epkOutput)
 
             task.mainOutput.convention(jsConfig.mainOutput)
             task.internationalOutput.convention(jsConfig.internationalOutput)
@@ -94,8 +98,8 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
         project.tasks.register(compileEpkTaskName, CompileEpkTask::class.java) { task ->
             task.group = "eaglercraft build"
 
-            task.sources.convention(suite.epkSources)
-            task.output.convention(suite.epkOutput)
+            task.epkSources.convention(suite.epkSources)
+            task.epkOutput.convention(suite.epkOutput)
         }
 
     val compileWasmRuntimeTask: TaskProvider<CompileWasmRuntimeTask> =
@@ -105,28 +109,8 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
             task.dependsOn(compileEpkTask)
 
             task.closureCompiler.convention(wasmConfig.closureCompiler)
-            task.externs.convention(wasmConfig.externs)
-            task.eagRuntimeUtil.convention(wasmConfig.eagRuntimeUtil)
-            task.eagRuntimeMain.convention(wasmConfig.eagRuntimeMain)
-            task.platformApplication.convention(wasmConfig.platformApplication)
-            task.platformAssets.convention(wasmConfig.platformAssets)
-            task.platformAudio.convention(wasmConfig.platformAudio)
-            task.platformFilesystem.convention(wasmConfig.platformFilesystem)
-            task.platformInput.convention(wasmConfig.platformInput)
-            task.platformNetworking.convention(wasmConfig.platformNetworking)
-            task.platformOpenGL.convention(wasmConfig.platformOpenGL)
-            task.platformRuntime.convention(wasmConfig.platformRuntime)
-            task.platformScreenRecord.convention(wasmConfig.platformScreenRecord)
-            task.platformVoiceClient.convention(wasmConfig.platformVoiceClient)
-            task.platformWebRTC.convention(wasmConfig.platformWebRTC)
-            task.platformWebView.convention(wasmConfig.platformWebView)
-            task.clientPlatformSingleplayer.convention(wasmConfig.clientPlatformSingleplayer)
-            task.serverPlatformSingleplayer.convention(wasmConfig.serverPlatformSingleplayer)
-            task.wasmBufferAllocator.convention(wasmConfig.wasmBufferAllocator)
-            task.webmDurationFix.convention(wasmConfig.webmDurationFix)
-            task.teavmRuntime.convention(wasmConfig.teavmRuntime)
-            task.eagEntryPoint.convention(wasmConfig.eagEntryPoint)
-            task.output.convention(wasmConfig.runtimeOutput)
+            task.closureInputFiles.convention(wasmConfig.closureInputFiles)
+            task.runtimeOutput.convention(wasmConfig.runtimeOutput)
         }
 
     val makeClientTask: TaskProvider<MakeWasmClientBundleTask> =
@@ -138,6 +122,6 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
 
             task.epwSource.convention(wasmConfig.epwSource)
             task.epwMeta.convention(wasmConfig.epwMeta)
-            task.outputDir.convention(wasmConfig.clientBundleOutput)
+            task.clientBundleOutput.convention(wasmConfig.clientBundleOutput)
         }
 }

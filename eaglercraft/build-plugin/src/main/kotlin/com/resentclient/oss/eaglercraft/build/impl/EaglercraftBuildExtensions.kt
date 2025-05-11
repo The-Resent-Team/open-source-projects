@@ -31,6 +31,7 @@ fun NamedDomainObjectContainer<EaglercraftBuildSuiteExtension>.js(
     val obj: EaglercraftBuildSuiteExtension = maybeCreate(name)
 
     obj.target.set(EaglercraftBuildTarget.JAVASCRIPT)
+    obj.target.disallowChanges()
     obj.getJs().apply(configure)
 
     return obj
@@ -43,6 +44,7 @@ fun NamedDomainObjectContainer<EaglercraftBuildSuiteExtension>.wasm(
     val obj: EaglercraftBuildSuiteExtension = maybeCreate(name)
 
     obj.target.set(EaglercraftBuildTarget.WASM_GC)
+    obj.target.disallowChanges()
     obj.getWasm().apply(configure)
 
     return obj

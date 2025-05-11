@@ -21,30 +21,12 @@ package com.resentclient.oss.eaglercraft.build.api
 
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.ListProperty
+import java.io.File
 
 interface EaglercraftBuildSuiteWASMExtension {
     val closureCompiler: RegularFileProperty
-    val externs: RegularFileProperty
-    val eagRuntimeUtil: RegularFileProperty
-    val eagRuntimeMain: RegularFileProperty
-    val platformApplication: RegularFileProperty
-    val platformAssets: RegularFileProperty
-    val platformAudio: RegularFileProperty
-    val platformFilesystem: RegularFileProperty
-    val platformInput: RegularFileProperty
-    val platformNetworking: RegularFileProperty
-    val platformOpenGL: RegularFileProperty
-    val platformRuntime: RegularFileProperty
-    val platformScreenRecord: RegularFileProperty
-    val platformVoiceClient: RegularFileProperty
-    val platformWebRTC: RegularFileProperty
-    val platformWebView: RegularFileProperty
-    val clientPlatformSingleplayer: RegularFileProperty
-    val serverPlatformSingleplayer: RegularFileProperty
-    val wasmBufferAllocator: RegularFileProperty
-    val webmDurationFix: RegularFileProperty
-    val teavmRuntime: RegularFileProperty
-    val eagEntryPoint: RegularFileProperty
+    val closureInputFiles: ListProperty<File>
     val runtimeOutput: RegularFileProperty
 
     val epwSource: RegularFileProperty

@@ -69,7 +69,7 @@ abstract class MakeOfflineDownloadTask : DefaultTask() {
 
             MakeOfflineDownload.main(params.toTypedArray())
         } catch (e: Exception) {
-            throw GradleException(e.message!!, e)
+            throw GradleException(e.message?: "Failed creating offline download!", e)
         }
     }
 }

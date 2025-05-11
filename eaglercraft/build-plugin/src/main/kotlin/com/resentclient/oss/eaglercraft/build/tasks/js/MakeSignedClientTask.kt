@@ -75,7 +75,7 @@ abstract class MakeSignedClientTask : DefaultTask() {
 
             MakeSignedClient.main(params.toTypedArray())
         } catch (e: Exception) {
-            throw GradleException(e.message!!, e)
+            throw GradleException(e.message?: "Failed making signed client!", e)
         }
     }
 }
