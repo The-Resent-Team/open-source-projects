@@ -44,4 +44,12 @@ interface EaglercraftBuildSuiteExtension {
     fun js(closure: Closure<*>): Unit {
         js(ConfigureUtil.configureUsing(closure))
     }
+
+    fun getWasm(): EaglercraftBuildSuiteWASMExtension
+
+    fun wasm(action: Action<EaglercraftBuildSuiteWASMExtension>): Unit
+
+    fun wasm(closure: Closure<*>): Unit {
+        wasm(ConfigureUtil.configureUsing(closure))
+    }
 }

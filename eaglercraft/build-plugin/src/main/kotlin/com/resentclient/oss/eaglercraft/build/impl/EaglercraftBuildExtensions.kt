@@ -18,25 +18,32 @@
 
 package com.resentclient.oss.eaglercraft.build.impl
 
-import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildExtension
 import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteExtension
-import org.gradle.api.Action
+import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteJSExtension
+import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteWASMExtension
+import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildTarget
 import org.gradle.api.NamedDomainObjectContainer
-import org.gradle.api.model.ObjectFactory
-import javax.inject.Inject
 
-open class EaglercraftBuildExtensionImpl @Inject constructor(objectFactory: ObjectFactory) : EaglercraftBuildExtension {
-    private val suites: NamedDomainObjectContainer<EaglercraftBuildSuiteExtension> =
-        objectFactory.domainObjectContainer(EaglercraftBuildSuiteExtension::class.java)
-        { name ->
-            EaglercraftBuildSuiteExtensionImpl(name, objectFactory)
-        }
+fun NamedDomainObjectContainer<EaglercraftBuildSuiteExtension>.js(
+    name: String,
+    configure: EaglercraftBuildSuiteJSExtension.() -> Unit
+): EaglercraftBuildSuiteExtension {
+    val obj: EaglercraftBuildSuiteExtension = maybeCreate(name)
 
-    override fun getSuites(): NamedDomainObjectContainer<EaglercraftBuildSuiteExtension> {
-        return suites
-    }
+    obj.target.set(EaglercraftBuildTarget.JAVASCRIPT)
+    obj.getJs().apply(configure)
 
-    override fun suites(action: Action<NamedDomainObjectContainer<EaglercraftBuildSuiteExtension>>) {
-        action.execute(suites)
-    }
+    return obj
+}
+
+fun NamedDomainObjectContainer<EaglercraftBuildSuiteExtension>.wasm(
+    name: String,
+    configure: EaglercraftBuildSuiteWASMExtension.() -> Unit
+): EaglercraftBuildSuiteExtension {
+    val obj: EaglercraftBuildSuiteExtension = maybeCreate(name)
+
+    obj.target.set(EaglercraftBuildTarget.WASM_GC)
+    obj.getWasm().apply(configure)
+
+    return obj
 }

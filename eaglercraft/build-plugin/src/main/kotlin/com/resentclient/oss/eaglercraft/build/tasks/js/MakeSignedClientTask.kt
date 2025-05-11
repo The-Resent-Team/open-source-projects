@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.resentclient.oss.eaglercraft.build.tasks
+package com.resentclient.oss.eaglercraft.build.tasks.js
 
-import net.lax1dude.eaglercraft.v1_8.buildtools.workspace.MakeOfflineDownload
+import net.lax1dude.eaglercraft.v1_8.buildtools.workspace.MakeSignedClient
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.RegularFileProperty
@@ -26,48 +26,54 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
-abstract class MakeOfflineDownloadTask : DefaultTask() {
+/**
+ * Lax1dude has expressed his intentions to remove support for signed clients
+ */
+@Deprecated(message = "To be removed in a future eaglercraft update", level = DeprecationLevel.WARNING)
+abstract class MakeSignedClientTask : DefaultTask() {
     @get:InputFile
-    abstract val offlineDownloadTemplate: RegularFileProperty
+    abstract val signedBundleTemplate: RegularFileProperty
 
     @get:InputFile
     abstract val javascriptSource: RegularFileProperty
 
     @get:InputFile
-    abstract val eaglerAssets: RegularFileProperty
-
-    @get:OutputFile
-    abstract val mainOutput: RegularFileProperty
-
-    @get:Optional
-    @get:OutputFile
-    abstract val internationalOutput: RegularFileProperty
+    abstract val assets: RegularFileProperty
 
     @get:Optional
     @get:InputFile
     abstract val languageMetadata: RegularFileProperty
 
+    @get:InputFile
+    abstract val signedClientTemplate: RegularFileProperty
+
+    @get:InputFile
+    abstract val updateDownloadSources: RegularFileProperty
+
+    @get:OutputFile
+    abstract val output: RegularFileProperty
+
     @TaskAction
-    fun makeOfflineDownload() {
+    fun makeSignedClient() {
         try {
             val params: MutableList<String> = ArrayList()
 
-            // offline download
-            params.add(offlineDownloadTemplate.get().asFile.absolutePath)
-            // js source
+            // signed bundle
+            params.add(signedBundleTemplate.get().asFile.absolutePath)
+            // js
             params.add(javascriptSource.get().asFile.absolutePath)
-            // eagler assets
-            params.add(eaglerAssets.get().asFile.absolutePath)
-            // US output
-            params.add(mainOutput.get().asFile.absolutePath)
-            // international output (optional)
-            if (internationalOutput.isPresent)
-                params.add(internationalOutput.get().asFile.absolutePath)
-            // langs (optional)
-            if (languageMetadata.isPresent)
-                params.add(languageMetadata.get().asFile.absolutePath)
+            // assets
+            params.add(assets.get().asFile.absolutePath)
+            // lang (optional)
+            if (languageMetadata.isPresent) params.add(languageMetadata.get().asFile.absolutePath)
+            // signed client
+            params.add(signedClientTemplate.get().asFile.absolutePath)
+            // update sources
+            params.add(updateDownloadSources.get().asFile.absolutePath)
+            // output
+            params.add(output.get().asFile.absolutePath)
 
-            MakeOfflineDownload.main(params.toTypedArray())
+            MakeSignedClient.main(params.toTypedArray())
         } catch (e: Exception) {
             throw GradleException(e.message!!, e)
         }

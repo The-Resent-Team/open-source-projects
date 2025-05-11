@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.resentclient.oss.eaglercraft.build.tasks
+package com.resentclient.oss.eaglercraft.build.tasks.common
 
 import net.lax1dude.eaglercraft.v1_8.buildtools.workspace.CompilePackage
 import org.gradle.api.DefaultTask

@@ -20,6 +20,7 @@ package com.resentclient.oss.eaglercraft.build.impl
 
 import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteExtension
 import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteJSExtension
+import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteWASMExtension
 import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildTarget
 import org.gradle.api.Action
 import org.gradle.api.file.DirectoryProperty
@@ -27,7 +28,7 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 
-class EaglercraftBuildSuiteExtensionImpl(
+open class EaglercraftBuildSuiteExtensionImpl(
     nameString: String,
     objects: ObjectFactory
 ) : EaglercraftBuildSuiteExtension {
@@ -43,9 +44,10 @@ class EaglercraftBuildSuiteExtensionImpl(
     override var sourceGeneratorOutput: RegularFileProperty = objects.fileProperty()
 
     // js
-    private var jsExtension: EaglercraftBuildSuiteJSExtension = objects.newInstance(EaglercraftBuildSuiteJSExtensionImpl::class.java)
+    private var jsExtension: EaglercraftBuildSuiteJSExtension = EaglercraftBuildSuiteJSExtensionImpl(objects)
 
     // wasm
+    private var wasmExtension: EaglercraftBuildSuiteWASMExtension = EaglercraftBuildSuiteWasmExtensionImpl(objects)
 
     init {
         this.name.set(nameString)
@@ -57,7 +59,19 @@ class EaglercraftBuildSuiteExtensionImpl(
 
     override fun js(action: Action<EaglercraftBuildSuiteJSExtension>) {
         target.set(EaglercraftBuildTarget.JAVASCRIPT)
+        target.disallowChanges()
 
         action.execute(jsExtension)
+    }
+
+    override fun getWasm(): EaglercraftBuildSuiteWASMExtension {
+        return wasmExtension
+    }
+
+    override fun wasm(action: Action<EaglercraftBuildSuiteWASMExtension>) {
+        target.set(EaglercraftBuildTarget.WASM_GC)
+        target.disallowChanges()
+
+        action.execute(wasmExtension)
     }
 }

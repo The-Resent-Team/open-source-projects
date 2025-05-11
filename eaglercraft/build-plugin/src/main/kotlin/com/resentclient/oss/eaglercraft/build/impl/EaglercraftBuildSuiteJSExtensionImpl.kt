@@ -21,9 +21,8 @@ package com.resentclient.oss.eaglercraft.build.impl
 import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteJSExtension
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
-import javax.inject.Inject
 
-class EaglercraftBuildSuiteJSExtensionImpl @Inject constructor(
+open class EaglercraftBuildSuiteJSExtensionImpl(
     objects: ObjectFactory
 ) : EaglercraftBuildSuiteJSExtension {
     override var offlineDownloadTemplate: RegularFileProperty = objects.fileProperty()
