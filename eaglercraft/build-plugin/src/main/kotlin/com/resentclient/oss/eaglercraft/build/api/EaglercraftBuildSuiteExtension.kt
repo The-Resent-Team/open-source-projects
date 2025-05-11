@@ -27,7 +27,7 @@ import org.gradle.util.internal.ConfigureUtil
 
 interface EaglercraftBuildSuiteExtension {
     val name: Property<String>
-    var target: Property<EaglercraftBuildTarget>
+    val target: Property<EaglercraftBuildTarget>
 
     // EPK generation
     val epkSources: DirectoryProperty
