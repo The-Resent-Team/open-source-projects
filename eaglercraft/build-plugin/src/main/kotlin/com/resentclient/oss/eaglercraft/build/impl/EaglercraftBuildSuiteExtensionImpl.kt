@@ -28,7 +28,7 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 
-open class EaglercraftBuildSuiteExtensionImpl(
+class EaglercraftBuildSuiteExtensionImpl(
     nameString: String,
     objects: ObjectFactory
 ) : EaglercraftBuildSuiteExtension {
@@ -41,7 +41,6 @@ open class EaglercraftBuildSuiteExtensionImpl(
 
     // source generators
     override var sourceGeneratorTaskName: Property<String> = objects.property(String::class.java)
-    override var sourceGeneratorOutput: RegularFileProperty = objects.fileProperty()
 
     // js
     private var jsExtension: EaglercraftBuildSuiteJSExtension = EaglercraftBuildSuiteJSExtensionImpl(objects)

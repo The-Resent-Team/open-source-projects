@@ -23,9 +23,6 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.*
 
 abstract class CompileWasmRuntimeTask : JavaExec() {
-    @get:InputFile
-    abstract val closureCompiler: RegularFileProperty
-
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val closureInputFiles: ConfigurableFileCollection
@@ -50,7 +47,6 @@ abstract class CompileWasmRuntimeTask : JavaExec() {
             "--js_output_file", runtimeOutput.get().asFile.absolutePath
         )
 
-        classpath.plus(closureCompiler)
         args = closureCompilerArguments + sourceJavascriptFiles + output
 
         super.exec()

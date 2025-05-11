@@ -21,8 +21,8 @@ package com.resentclient.oss.eaglercraft.build.api
 import org.gradle.api.file.RegularFileProperty
 
 interface EaglercraftBuildSuiteJSExtension {
+    val sourceGeneratorOutput: RegularFileProperty
     val offlineDownloadTemplate: RegularFileProperty
-    val eaglerAssets: RegularFileProperty
     val mainOutput: RegularFileProperty
     val internationalOutput: RegularFileProperty
     val languageMetadata: RegularFileProperty

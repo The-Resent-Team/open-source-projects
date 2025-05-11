@@ -23,7 +23,9 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
@@ -34,17 +36,24 @@ abstract class MakeWasmClientBundleTask : DefaultTask() {
     @get:InputFile
     abstract val epwMeta: RegularFileProperty
 
+    @get:Optional
+    @get:InputDirectory
+    abstract val epwSearchDirectory: DirectoryProperty
+
     @get:OutputDirectory
-    abstract val clientBundleOutput: DirectoryProperty
+    abstract val clientBundleOutputDir: DirectoryProperty
 
     @TaskAction
     fun makeClientBundle() {
         try {
+            if (epwSearchDirectory.isPresent)
+                MakeWASMClientBundle.`resent$gradleDirectoryFix` = epwSearchDirectory.get().asFile
+
             MakeWASMClientBundle.main(
                 arrayOf(
                     epwSource.get().asFile.absolutePath,
                     epwMeta.get().asFile.absolutePath,
-                    clientBundleOutput.get().asFile.absolutePath
+                    clientBundleOutputDir.get().asFile.absolutePath
                 )
             )
         } catch (e: Exception) {

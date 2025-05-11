@@ -22,13 +22,16 @@ package com.resentclient.oss.eaglercraft.build.api
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
 
 interface EaglercraftBuildSuiteWASMExtension {
     val closureCompiler: RegularFileProperty
+    val closureMainClass: Property<String>
     val closureInputFiles: ConfigurableFileCollection
     val runtimeOutput: RegularFileProperty
 
     val epwSource: RegularFileProperty
     val epwMeta: RegularFileProperty
-    val clientBundleOutput: DirectoryProperty
+    val epwSearchDirectory: DirectoryProperty
+    val clientBundleOutputDir: DirectoryProperty
 }

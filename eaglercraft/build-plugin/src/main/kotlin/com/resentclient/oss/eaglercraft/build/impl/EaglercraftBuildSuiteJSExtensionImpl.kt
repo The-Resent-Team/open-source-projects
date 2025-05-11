@@ -23,11 +23,11 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 
 open class EaglercraftBuildSuiteJSExtensionImpl(
-    objects: ObjectFactory
+    objects: ObjectFactory,
 ) : EaglercraftBuildSuiteJSExtension {
+    override var sourceGeneratorOutput: RegularFileProperty =
+        objects.fileProperty()
     override var offlineDownloadTemplate: RegularFileProperty = objects.fileProperty()
-        set(value) = field.set(value)
-    override var eaglerAssets: RegularFileProperty = objects.fileProperty()
         set(value) = field.set(value)
     override var mainOutput: RegularFileProperty = objects.fileProperty()
         set(value) = field.set(value)

@@ -76,7 +76,7 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
             task.dependsOn(compileEpkTask)
 
             task.offlineDownloadTemplate.convention(jsConfig.offlineDownloadTemplate)
-            task.javascriptSource.convention(suite.sourceGeneratorOutput)
+            task.javascriptSource.convention(jsConfig.sourceGeneratorOutput)
             task.eaglerAssets.convention(compileEpkTask.get().epkOutput)
 
             task.mainOutput.convention(jsConfig.mainOutput)
@@ -108,8 +108,10 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
 
             task.dependsOn(compileEpkTask)
 
-            task.closureCompiler.convention(wasmConfig.closureCompiler)
-            task.closureInputFiles.convention(wasmConfig.closureInputFiles)
+            task.mainClass.convention(wasmConfig.closureMainClass)
+            task.classpath += project.files(wasmConfig.closureCompiler)
+
+            task.closureInputFiles.setFrom(wasmConfig.closureInputFiles)
             task.runtimeOutput.convention(wasmConfig.runtimeOutput)
         }
 
@@ -117,11 +119,13 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
         project.tasks.register(makeWasmClientBundleTaskName, MakeWasmClientBundleTask::class.java) { task ->
             task.group = "eaglercraft build"
 
+            task.dependsOn(suite.sourceGeneratorTaskName.get())
             task.dependsOn(compileEpkTask)
             task.dependsOn(compileWasmRuntimeTask)
 
             task.epwSource.convention(wasmConfig.epwSource)
             task.epwMeta.convention(wasmConfig.epwMeta)
-            task.clientBundleOutput.convention(wasmConfig.clientBundleOutput)
+            task.epwSearchDirectory.convention(wasmConfig.epwSearchDirectory)
+            task.clientBundleOutputDir.convention(wasmConfig.clientBundleOutputDir)
         }
 }

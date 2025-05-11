@@ -20,14 +20,12 @@ package com.resentclient.oss.eaglercraft.build.tasks.wasm.internal
 
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import org.jetbrains.annotations.ApiStatus
 
 @ApiStatus.Internal
 abstract class CompileWasmBootstrapTask : JavaExec() {
-    @get:InputFile
-    abstract val closureCompiler: RegularFileProperty
-
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val closureInputFiles: ConfigurableFileCollection
@@ -52,7 +50,6 @@ abstract class CompileWasmBootstrapTask : JavaExec() {
             "--js_output_file", output.get().asFile.absolutePath
         )
 
-        classpath.plus(closureCompiler)
         args = closureCompilerArguments + sourceJavascriptFiles + output
 
         super.exec()

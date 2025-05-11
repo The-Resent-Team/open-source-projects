@@ -24,6 +24,7 @@ import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZOutputStream;
 
 public class MakeWASMClientBundle {
+	public static File resent$gradleDirectoryFix;
 
 	private static class DataSegment {
 		
@@ -78,15 +79,15 @@ public class MakeWASMClientBundle {
 		String offlineTemplate = getRequired(propsSrc, "offline-download-template");
 		String bootstrapJS = getRequired(propsSrc, "offline-download-script");
 		String downloadName = getRequired(propsSrc, "offline-download-name");
-		File loaderJSFile = new File(getRequired(propsSrc, "loader-js-file"));
-		File loaderWASMFile = new File(getRequired(propsSrc, "loader-wasm-file"));
-		File eagRuntimeJSFile = new File(getRequired(propsSrc, "eagruntime-js-file"));
-		File classesWASMFile = new File(getRequired(propsSrc, "classes-wasm-file"));
+		File loaderJSFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "loader-js-file"));
+		File loaderWASMFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "loader-wasm-file"));
+		File eagRuntimeJSFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "eagruntime-js-file"));
+		File classesWASMFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "classes-wasm-file"));
 		File classesDeobfTEADBGFile = null;
 		File classesDeobfWASMFile = null;
 		if(propsSrc.getProperty("classes-deobf-wasm-file") != null) {
-			classesDeobfTEADBGFile = new File(getRequired(propsSrc, "classes-deobf-teadbg-file"));
-			classesDeobfWASMFile = new File(getRequired(propsSrc, "classes-deobf-wasm-file"));
+			classesDeobfTEADBGFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "classes-deobf-teadbg-file"));
+			classesDeobfWASMFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "classes-deobf-wasm-file"));
 		}
 
 		for(int i = 0;; ++i) {
@@ -111,18 +112,18 @@ public class MakeWASMClientBundle {
 			epks.add(new EPKStruct(pathName, fileName));
 		}
 
-		File splashFile = new File(getRequired(propsSrc, "splash-logo-image-file"));
+		File splashFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "splash-logo-image-file"));
 		String splashMIME = getRequired(propsSrc, "splash-logo-image-mime");
-		File pressAnyKeyFile = new File(getRequired(propsSrc, "press-any-key-image-file"));
+		File pressAnyKeyFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "press-any-key-image-file"));
 		String pressAnyKeyMIME = getRequired(propsSrc, "press-any-key-image-mime");
-		File crashFile = new File(getRequired(propsSrc, "crash-logo-image-file"));
+		File crashFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "crash-logo-image-file"));
 		String crashMIME = getRequired(propsSrc, "crash-logo-image-mime");
-		File faviconFile = new File(getRequired(propsSrc, "favicon-image-file"));
+		File faviconFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "favicon-image-file"));
 		String faviconMIME = getRequired(propsSrc, "favicon-image-mime");
 		
-		File JSPIUnavailableFile = new File(getRequired(propsSrc, "jspi-unavailable-file"));
+		File JSPIUnavailableFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "jspi-unavailable-file"));
 		
-		f = new File(args[1]);
+		f = new File(/*resent$gradleDirectoryFix, */args[1]);
 		
 		System.out.println("Parsing: " + f.getAbsolutePath());
 		
@@ -173,7 +174,7 @@ public class MakeWASMClientBundle {
 				struct.epkData = getFileBytes(struct.epkFile);
 			}else {
 				System.out.println("Generating EPK: " + struct.epkFile.getAbsolutePath());
-				struct.epkData = makeEPK(struct.epkFile, new File("._assets." + i + ".0.tmp"));
+				struct.epkData = makeEPK(struct.epkFile, new File(resent$gradleDirectoryFix, "._assets." + i + ".0.tmp"));
 			}
 		}
 		
@@ -439,7 +440,7 @@ public class MakeWASMClientBundle {
 		epwHeaderData.putInt(8, headerLen + finalPayload.length); // length
 		epwHeaderData.putInt(12, (int)crc.getValue()); // CRC32
 
-		File destFolder = new File(args[args.length - 1]);
+		File destFolder = new File(/*resent$gradleDirectoryFix, */args[args.length - 1]);
 
 		System.out.println();
 		System.out.println("Writing destination file...");

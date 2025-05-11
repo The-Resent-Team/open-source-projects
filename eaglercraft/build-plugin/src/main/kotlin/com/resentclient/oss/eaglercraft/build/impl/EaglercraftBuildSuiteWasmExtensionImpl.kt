@@ -23,15 +23,18 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
 
 open class EaglercraftBuildSuiteWasmExtensionImpl(
     objects: ObjectFactory
 ) : EaglercraftBuildSuiteWASMExtension {
     override val closureCompiler: RegularFileProperty = objects.fileProperty()
+    override val closureMainClass: Property<String> = objects.property(String::class.java)
     override val closureInputFiles: ConfigurableFileCollection = objects.fileCollection()
     override val runtimeOutput: RegularFileProperty = objects.fileProperty()
 
     override val epwSource: RegularFileProperty = objects.fileProperty()
     override val epwMeta: RegularFileProperty = objects.fileProperty()
-    override val clientBundleOutput: DirectoryProperty = objects.directoryProperty()
+    override val epwSearchDirectory: DirectoryProperty = objects.directoryProperty()
+    override val clientBundleOutputDir: DirectoryProperty = objects.directoryProperty()
 }

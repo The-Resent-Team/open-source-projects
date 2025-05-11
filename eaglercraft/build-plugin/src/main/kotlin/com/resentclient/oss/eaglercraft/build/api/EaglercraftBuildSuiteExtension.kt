@@ -27,7 +27,7 @@ import org.gradle.util.internal.ConfigureUtil
 
 interface EaglercraftBuildSuiteExtension {
     val name: Property<String>
-    val target: Property<EaglercraftBuildTarget>
+    var target: Property<EaglercraftBuildTarget>
 
     // EPK generation
     val epkSources: DirectoryProperty
@@ -35,7 +35,6 @@ interface EaglercraftBuildSuiteExtension {
 
     // Source generation
     val sourceGeneratorTaskName: Property<String>
-    val sourceGeneratorOutput: RegularFileProperty
 
     fun getJs(): EaglercraftBuildSuiteJSExtension
 
