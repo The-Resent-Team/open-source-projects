@@ -17,11 +17,13 @@
  */
 package com.resentclient.oss.eaglercraft.build.tasks.common
 
+import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildEpkCompression
 import net.lax1dude.eaglercraft.v1_8.buildtools.workspace.CompilePackage
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import java.io.IOException
 
@@ -33,13 +35,21 @@ abstract class CompileEpkTask : DefaultTask() {
     @get:OutputFile
     abstract val epkOutput: RegularFileProperty
 
+    @get:Input
+    @get:Optional
+    abstract val epkCompression: Property<EaglercraftBuildEpkCompression>
+
     @TaskAction
     fun compileEpk() {
+        if (!epkCompression.isPresent)
+            epkCompression.set(EaglercraftBuildEpkCompression.getDefault())
+
         try {
             CompilePackage.main(
                 arrayOf(
                     epkSources.get().asFile.absolutePath,
-                    epkOutput.get().asFile.absolutePath
+                    epkOutput.get().asFile.absolutePath,
+                    epkCompression.get().string
                 )
             )
         } catch (e: IOException) {

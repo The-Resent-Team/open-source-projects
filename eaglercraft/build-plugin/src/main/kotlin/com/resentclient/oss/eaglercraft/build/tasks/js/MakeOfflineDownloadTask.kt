@@ -20,9 +20,9 @@ package com.resentclient.oss.eaglercraft.build.tasks.js
 import net.lax1dude.eaglercraft.v1_8.buildtools.workspace.MakeOfflineDownload
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
@@ -46,8 +46,8 @@ abstract class MakeOfflineDownloadTask : DefaultTask() {
     abstract val internationalOutput: RegularFileProperty
 
     @get:Optional
-    @get:InputDirectory
-    abstract val languageMetadata: DirectoryProperty
+    @get:Input
+    abstract val languageMetadata: Property<String>
 
     @TaskAction
     fun makeOfflineDownload() {
@@ -67,7 +67,7 @@ abstract class MakeOfflineDownloadTask : DefaultTask() {
                 params.add(internationalOutput.get().asFile.absolutePath)
             // langs (optional)
             if (languageMetadata.isPresent)
-                params.add(languageMetadata.get().asFile.absolutePath)
+                params.add(project.file(languageMetadata.get()).absolutePath)
 
             MakeOfflineDownload.main(params.toTypedArray())
         } catch (e: Exception) {

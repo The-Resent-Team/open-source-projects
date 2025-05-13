@@ -18,7 +18,6 @@
 
 package com.resentclient.oss.eaglercraft.build.api
 
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 
 interface EaglercraftBuildSuiteJSExtension {
@@ -26,5 +25,4 @@ interface EaglercraftBuildSuiteJSExtension {
     val offlineDownloadTemplate: RegularFileProperty
     val mainOutput: RegularFileProperty
     val internationalOutput: RegularFileProperty
-    val languageMetadata: DirectoryProperty
 }

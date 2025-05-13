@@ -435,7 +435,7 @@ public class MakeWASMClientBundle {
 		
 		CRC32 crc = new CRC32();
 		crc.update(epwHeaderDataArr, 16, headerLen - 16);
-		crc.update(finalPayload);
+		crc.update(finalPayload, 0, finalPayload.length);
 		
 		epwHeaderData.putInt(8, headerLen + finalPayload.length); // length
 		epwHeaderData.putInt(12, (int)crc.getValue()); // CRC32

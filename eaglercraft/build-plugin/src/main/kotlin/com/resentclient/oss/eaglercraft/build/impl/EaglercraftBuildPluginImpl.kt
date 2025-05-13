@@ -58,6 +58,7 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
     val capitalizedName: String = suite.name.get().replaceFirstChar { it.uppercase() }
 
     val compileEpkTaskName: String = "compile${capitalizedName}Epk"
+    val compileLanguageEpkTaskName: String = "compile${capitalizedName}LanguageEpk"
     val makeOfflineDownloadTaskName: String = "make${capitalizedName}OfflineDownload"
 
     val compileEpkTask: TaskProvider<CompileEpkTask> =
@@ -68,12 +69,21 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
             task.epkOutput.convention(suite.epkOutput)
         }
 
+    val compileLanguageEpkTask: TaskProvider<CompileEpkTask> =
+        project.tasks.register(compileLanguageEpkTaskName, CompileEpkTask::class.java) { task ->
+            task.group = "eaglercraft build"
+
+            task.epkSources.convention(suite.languageMetadataInput)
+            task.epkOutput.convention(suite.languageEpkOutput)
+        }
+
     val makeOfflineDownloadTask: TaskProvider<MakeOfflineDownloadTask> =
         project.tasks.register(makeOfflineDownloadTaskName, MakeOfflineDownloadTask::class.java) { task ->
             task.group = "eaglercraft build"
 
             task.dependsOn(suite.sourceGeneratorTaskName.get())
             task.dependsOn(compileEpkTask)
+            task.dependsOn(compileLanguageEpkTask)
 
             task.offlineDownloadTemplate.convention(jsConfig.offlineDownloadTemplate)
             task.javascriptSource.convention(jsConfig.sourceGeneratorOutput)
@@ -82,7 +92,7 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
             task.mainOutput.convention(jsConfig.mainOutput)
             task.internationalOutput.convention(jsConfig.internationalOutput)
 
-            task.languageMetadata.convention(jsConfig.languageMetadata)
+            task.languageMetadata.convention(suite.languageEpkOutput.asFile.get().absolutePath)
         }
 }
 
@@ -91,6 +101,7 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
     val capitalizedName: String = suite.name.get().replaceFirstChar { it.uppercase() }
 
     val compileEpkTaskName: String = "compile${capitalizedName}Epk"
+    val compileLanguageEpkTaskName: String = "compile${capitalizedName}LanguageEpk"
     val compileEagRuntimeTaskName: String = "compile${capitalizedName}WasmRuntime"
     val makeWasmClientBundleTaskName: String = "make${capitalizedName}WasmClientBundle"
 
@@ -102,11 +113,20 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
             task.epkOutput.convention(suite.epkOutput)
         }
 
+    val compileLanguageEpkTask: TaskProvider<CompileEpkTask> =
+        project.tasks.register(compileLanguageEpkTaskName, CompileEpkTask::class.java) { task ->
+            task.group = "eaglercraft build"
+
+            task.epkSources.convention(suite.languageMetadataInput)
+            task.epkOutput.convention(suite.languageEpkOutput)
+        }
+
     val compileWasmRuntimeTask: TaskProvider<CompileWasmRuntimeTask> =
         project.tasks.register(compileEagRuntimeTaskName, CompileWasmRuntimeTask::class.java) { task ->
             task.group = "eaglercraft build"
 
             task.dependsOn(compileEpkTask)
+            task.dependsOn(compileLanguageEpkTask)
 
             task.mainClass.convention(wasmConfig.closureMainClass)
             task.classpath += project.files(wasmConfig.closureCompiler)
@@ -121,6 +141,7 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
 
             task.dependsOn(suite.sourceGeneratorTaskName.get())
             task.dependsOn(compileEpkTask)
+            task.dependsOn(compileLanguageEpkTask)
             task.dependsOn(compileWasmRuntimeTask)
 
             task.epwSource.convention(wasmConfig.epwSource)

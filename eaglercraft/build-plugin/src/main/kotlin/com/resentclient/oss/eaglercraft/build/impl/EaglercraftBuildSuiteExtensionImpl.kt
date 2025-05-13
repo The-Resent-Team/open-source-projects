@@ -39,6 +39,10 @@ class EaglercraftBuildSuiteExtensionImpl(
     override val epkSources: DirectoryProperty = objects.directoryProperty()
     override val epkOutput: RegularFileProperty = objects.fileProperty()
 
+    // lang epk
+    override val languageMetadataInput: DirectoryProperty = objects.directoryProperty()
+    override val languageEpkOutput: RegularFileProperty = objects.fileProperty()
+
     // source generators
     override val sourceGeneratorTaskName: Property<String> = objects.property(String::class.java)
 

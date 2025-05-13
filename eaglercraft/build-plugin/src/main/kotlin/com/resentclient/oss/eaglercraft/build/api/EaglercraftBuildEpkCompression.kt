@@ -16,17 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.resentclient.oss.eaglercraft.build.impl
+package com.resentclient.oss.eaglercraft.build.api
 
-import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteJSExtension
-import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.model.ObjectFactory
+enum class EaglercraftBuildEpkCompression(val string: String) {
+    GZIP("gzip"),
+    ZLIB("zlib"),
+    NONE("none");
 
-open class EaglercraftBuildSuiteJSExtensionImpl(
-    objects: ObjectFactory,
-) : EaglercraftBuildSuiteJSExtension {
-    override val sourceGeneratorOutput: RegularFileProperty = objects.fileProperty()
-    override val offlineDownloadTemplate: RegularFileProperty = objects.fileProperty()
-    override val mainOutput: RegularFileProperty = objects.fileProperty()
-    override val internationalOutput: RegularFileProperty = objects.fileProperty()
+    companion object {
+        fun getDefault() : EaglercraftBuildEpkCompression {
+            return GZIP
+        }
+    }
 }

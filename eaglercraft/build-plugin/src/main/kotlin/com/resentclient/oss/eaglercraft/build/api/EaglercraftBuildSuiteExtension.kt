@@ -33,6 +33,10 @@ interface EaglercraftBuildSuiteExtension {
     val epkSources: DirectoryProperty
     val epkOutput: RegularFileProperty
 
+    // lang epk
+    val languageMetadataInput: DirectoryProperty
+    val languageEpkOutput: RegularFileProperty
+
     // Source generation
     val sourceGeneratorTaskName: Property<String>
 
