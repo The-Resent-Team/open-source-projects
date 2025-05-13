@@ -19,6 +19,7 @@
 package com.resentclient.oss.eaglercraft.build.impl
 
 import com.resentclient.oss.eaglercraft.build.api.EaglercraftBuildSuiteJSExtension
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 
@@ -29,5 +30,5 @@ open class EaglercraftBuildSuiteJSExtensionImpl(
     override val offlineDownloadTemplate: RegularFileProperty = objects.fileProperty()
     override val mainOutput: RegularFileProperty = objects.fileProperty()
     override val internationalOutput: RegularFileProperty = objects.fileProperty()
-    override val languageMetadata: RegularFileProperty = objects.fileProperty()
+    override val languageMetadata: DirectoryProperty = objects.directoryProperty()
 }
