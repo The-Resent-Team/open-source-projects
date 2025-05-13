@@ -460,8 +460,12 @@ public class MakeWASMClientBundle {
 
 		System.out.println();
 
-		MakeOfflineDownload.main(new String[] { offlineTemplate, bootstrapJS, destFile.getAbsolutePath(),
-				(new File(destFolder, downloadName)).getAbsolutePath() });
+		MakeOfflineDownload.main(new String[] {
+				new File(resent$gradleDirectoryFix, offlineTemplate).getAbsolutePath(),
+				new File(resent$gradleDirectoryFix, bootstrapJS).getAbsolutePath(),
+				destFile.getAbsolutePath(),
+				(new File(destFolder, downloadName)).getAbsolutePath()
+		});
 
 		System.out.println();
 		System.out.println("Done!");
