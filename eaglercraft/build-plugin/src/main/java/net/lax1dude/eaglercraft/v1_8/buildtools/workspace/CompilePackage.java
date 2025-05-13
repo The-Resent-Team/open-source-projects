@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.jcraft.jzlib.CRC32;
 import com.jcraft.jzlib.Deflater;
@@ -20,13 +21,15 @@ import com.jcraft.jzlib.GZIPOutputStream;
 
 public class CompilePackage {
 	
-	private static ArrayList<File> files = new ArrayList();
+//	private static ArrayList<File> files = new ArrayList();
 	
 	public static void main(String[] args) throws IOException {
 		if(args.length < 2 || args.length > 4) {
 			System.out.println("Usage: java -jar CompilePackage.jar <input directory> <output file> [gzip|zlib|none] [file-type]");
 			return;
 		}
+
+		ArrayList<File> files = new ArrayList<>();
 		
 		File root = new File(args[0]);
 		File output = new File(args[1]);
@@ -46,7 +49,8 @@ public class CompilePackage {
 			compressionType = 'G';
 		}
 		
-		listDirectory(root);
+		listDirectory(root, files);
+//		System.out.println("root" + root.getAbsolutePath());
 		ByteArrayOutputStream osb = new ByteArrayOutputStream();
 		String start = root.getAbsolutePath();
 		
@@ -158,10 +162,10 @@ public class CompilePackage {
 		os.write((int)(i & 0xFF));
 	}
 	
-	public static void listDirectory(File dir) {
+	public static void listDirectory(File dir, List<File> files) {
 		for(File f : dir.listFiles()) {
 			if(f.isDirectory()) {
-				listDirectory(f);
+				listDirectory(f, files);
 			}else {
 				files.add(f);
 			}

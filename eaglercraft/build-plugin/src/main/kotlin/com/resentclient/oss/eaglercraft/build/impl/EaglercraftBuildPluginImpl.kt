@@ -89,7 +89,7 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
 
             task.offlineDownloadTemplate.convention(jsConfig.offlineDownloadTemplate)
             task.javascriptSource.convention(jsConfig.sourceGeneratorOutput)
-            task.eaglerAssets.convention(compileEpkTask.get().epkOutput)
+            task.eaglerAssets.convention(suite.epkOutput)
 
             task.mainOutput.convention(jsConfig.mainOutput)
             task.internationalOutput.convention(jsConfig.internationalOutput)
@@ -143,7 +143,7 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
         project.tasks.register(makeWasmClientBundleTaskName, MakeWasmClientBundleTask::class.java) { task ->
             task.group = "eaglercraft build"
 
-            task.dependsOn(suite.sourceGeneratorTaskName.get())
+            task.dependsOn(suite.sourceGeneratorTaskName)
             task.dependsOn(compileEpkTask)
             task.dependsOn(compileLanguageEpkTask)
             task.dependsOn(compileWasmRuntimeTask)
