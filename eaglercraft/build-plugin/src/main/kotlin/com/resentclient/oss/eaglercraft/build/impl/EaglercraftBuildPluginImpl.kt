@@ -67,6 +67,7 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
 
             task.epkSources.convention(suite.epkSources)
             task.epkOutput.convention(suite.epkOutput)
+            task.epkCompression.convention(EaglercraftBuildEpkCompression.GZIP)
         }
 
     val compileLanguageEpkTask: TaskProvider<CompileEpkTask> =
@@ -75,6 +76,7 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
 
             task.epkSources.convention(suite.languageMetadataInput)
             task.epkOutput.convention(suite.languageEpkOutput)
+            task.epkCompression.convention(EaglercraftBuildEpkCompression.GZIP)
         }
 
     val makeOfflineDownloadTask: TaskProvider<MakeOfflineDownloadTask> =
@@ -111,6 +113,7 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
 
             task.epkSources.convention(suite.epkSources)
             task.epkOutput.convention(suite.epkOutput)
+            task.epkCompression.convention(EaglercraftBuildEpkCompression.NONE)
         }
 
     val compileLanguageEpkTask: TaskProvider<CompileEpkTask> =
@@ -119,6 +122,7 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
 
             task.epkSources.convention(suite.languageMetadataInput)
             task.epkOutput.convention(suite.languageEpkOutput)
+            task.epkCompression.convention(EaglercraftBuildEpkCompression.NONE)
         }
 
     val compileWasmRuntimeTask: TaskProvider<CompileWasmRuntimeTask> =

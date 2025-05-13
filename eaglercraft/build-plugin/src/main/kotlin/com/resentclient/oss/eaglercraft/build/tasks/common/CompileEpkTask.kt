@@ -41,9 +41,6 @@ abstract class CompileEpkTask : DefaultTask() {
 
     @TaskAction
     fun compileEpk() {
-        if (!epkCompression.isPresent)
-            epkCompression.set(EaglercraftBuildEpkCompression.getDefault())
-
         try {
             CompilePackage.main(
                 arrayOf(
