@@ -52,7 +52,7 @@ public class MakeWASMClientBundle {
 
 		private EPKStruct(String epkLoadPath, String epkFilePath) {
 			this.epkLoadPathStr = epkLoadPath;
-			this.epkFile = new File(epkFilePath);
+			this.epkFile = new File(resent$gradleDirectoryFix, epkFilePath);
 			this.epkFilePathStr = this.epkFile.getName();
 		}
 
