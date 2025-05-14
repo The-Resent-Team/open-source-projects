@@ -56,6 +56,8 @@ abstract class MakeWasmClientBundleTask : DefaultTask() {
                     clientBundleOutputDir.get().asFile.absolutePath
                 )
             )
+
+            MakeWASMClientBundle.`resent$gradleDirectoryFix` = null
         } catch (e: Exception) {
             throw GradleException(e.message ?: "Failed making wasm client bundle!", e)
         }
