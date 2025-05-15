@@ -46,18 +46,14 @@ abstract class MakeWasmClientBundleTask : DefaultTask() {
     @TaskAction
     fun makeClientBundle() {
         try {
-            if (epwSearchDirectory.isPresent)
-                MakeWASMClientBundle.`resent$gradleDirectoryFix` = epwSearchDirectory.get().asFile
-
-            MakeWASMClientBundle.main(
+            MakeWASMClientBundle.makeTheClient(
                 arrayOf(
                     epwSource.get().asFile.absolutePath,
                     epwMeta.get().asFile.absolutePath,
                     clientBundleOutputDir.get().asFile.absolutePath
-                )
+                ),
+                if (epwSearchDirectory.isPresent) epwSearchDirectory.get().asFile else null
             )
-
-            MakeWASMClientBundle.`resent$gradleDirectoryFix` = null
         } catch (e: Exception) {
             throw GradleException(e.message ?: "Failed making wasm client bundle!", e)
         }

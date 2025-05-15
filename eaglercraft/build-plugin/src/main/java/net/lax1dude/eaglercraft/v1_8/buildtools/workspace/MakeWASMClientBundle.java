@@ -24,8 +24,6 @@ import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZOutputStream;
 
 public class MakeWASMClientBundle {
-	public static File resent$gradleDirectoryFix;
-
 	private static class DataSegment {
 		
 		private final int offset;
@@ -50,7 +48,7 @@ public class MakeWASMClientBundle {
 
 		private int epkDataOffset;
 
-		private EPKStruct(String epkLoadPath, String epkFilePath) {
+		private EPKStruct(String epkLoadPath, String epkFilePath, File resent$gradleDirectoryFix) {
 			this.epkLoadPathStr = epkLoadPath;
 			this.epkFile = new File(resent$gradleDirectoryFix, epkFilePath);
 			this.epkFilePathStr = this.epkFile.getName();
@@ -59,18 +57,22 @@ public class MakeWASMClientBundle {
 	}
 
 	public static void main(String[] args) throws IOException {
+		makeTheClient(args, null);
+	}
+
+	public static void makeTheClient(String[] args, File resent$gradleDirectoryFix) throws IOException {
 		if(args.length != 3) {
 			System.err.println("Usage: java -jar CompilePackageWASM.jar <epw_src.txt> <epw_meta.txt> <output folder>");
 			return;
 		}
-		
+
 		List<EPKStruct> epks = new ArrayList<>();
-		
+
 		File f = new File(args[0]);
-		
+
 		System.out.println();
 		System.out.println("Parsing: " + f.getAbsolutePath());
-		
+
 		Properties propsSrc = new Properties();
 		try(InputStream is = new FileInputStream(f)) {
 			propsSrc.load(is);
@@ -109,7 +111,7 @@ public class MakeWASMClientBundle {
 					pathName = pathName.substring(0, pathName.length() - 1);
 				}
 			}
-			epks.add(new EPKStruct(pathName, fileName));
+			epks.add(new EPKStruct(pathName, fileName, resent$gradleDirectoryFix));
 		}
 
 		File splashFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "splash-logo-image-file"));
@@ -120,13 +122,13 @@ public class MakeWASMClientBundle {
 		String crashMIME = getRequired(propsSrc, "crash-logo-image-mime");
 		File faviconFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "favicon-image-file"));
 		String faviconMIME = getRequired(propsSrc, "favicon-image-mime");
-		
+
 		File JSPIUnavailableFile = new File(resent$gradleDirectoryFix, getRequired(propsSrc, "jspi-unavailable-file"));
-		
+
 		f = new File(/*resent$gradleDirectoryFix, */args[1]);
-		
+
 		System.out.println("Parsing: " + f.getAbsolutePath());
-		
+
 		Properties propsMeta = new Properties();
 		try(InputStream is = new FileInputStream(f)) {
 			propsMeta.load(is);
@@ -166,7 +168,7 @@ public class MakeWASMClientBundle {
 			System.out.println("Reading: " + classesDeobfWASMFile.getAbsolutePath());
 			classesDeobfWASMBin = getFileBytes(classesDeobfWASMFile);
 		}
-		
+
 		for(int i = 0, l = epks.size(); i < l; ++i) {
 			EPKStruct struct = epks.get(i);
 			if(struct.epkFile.isFile()) {
@@ -177,7 +179,7 @@ public class MakeWASMClientBundle {
 				struct.epkData = makeEPK(struct.epkFile, new File(resent$gradleDirectoryFix, "._assets." + i + ".0.tmp"));
 			}
 		}
-		
+
 		System.out.println("Reading: " + splashFile.getAbsolutePath());
 		byte[] splashBin = getFileBytes(splashFile);
 		System.out.println("Reading: " + pressAnyKeyFile.getAbsolutePath());
@@ -188,7 +190,7 @@ public class MakeWASMClientBundle {
 		byte[] faviconBin = getFileBytes(faviconFile);
 		System.out.println("Reading: " + JSPIUnavailableFile.getAbsolutePath());
 		byte[] JSPIUnavailableBin = getFileBytes(JSPIUnavailableFile);
-		
+
 		System.out.println();
 		System.out.println("Compressing eagruntime.js");
 		byte[] eagruntimeJSCompressed = compressFileBytes(eagRuntimeJSBin);
@@ -208,19 +210,19 @@ public class MakeWASMClientBundle {
 			System.out.println("Compressing EPK #" + i + ": " + struct.epkFilePathStr);
 			struct.epkDataCompressed = compressFileBytes(struct.epkData);
 		}
-		
+
 		System.out.println("Compressing JSPI unavailable screen");
 		byte[] JSPIUnavailableCompressed = compressFileBytes(JSPIUnavailableBin);
 
 		System.out.println();
 		System.out.println("Generating EPW...");
-		
+
 		// Write payload and calculate offsets:
-		
+
 		int headerLen = ((276 + 32 * epks.size()) + 127) & ~127;
-		
+
 		Map<String, DataSegment> stringPool = new HashMap<>();
-		
+
 		ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
 		DataSegment clientPackageNameOffset = poolString(clientPackageName, stringPool, bao);
@@ -230,7 +232,7 @@ public class MakeWASMClientBundle {
 		DataSegment clientForkNameOffset = poolString(clientForkName, stringPool, bao);
 		DataSegment clientForkVersionOffset = poolString(clientForkVersion, stringPool, bao);
 		DataSegment clientForkVendorOffset = poolString(clientForkVendor, stringPool, bao);
-		
+
 		DataSegment splashMIMEOffset = poolString(splashMIME, stringPool, bao);
 		DataSegment pressAnyKeyMIMEOffset = poolString(pressAnyKeyMIME, stringPool, bao);
 		DataSegment crashMIMEOffset = poolString(crashMIME, stringPool, bao);
@@ -261,40 +263,40 @@ public class MakeWASMClientBundle {
 			metadataSegmentOffset = bao.size();
 			bao.write(metaList);
 		}
-		
+
 		int splashDataOffset = bao.size();
 		bao.write(splashBin);
-		
+
 		int pressAnyKeyDataOffset = bao.size();
 		bao.write(pressAnyKeyBin);
-		
+
 		int crashDataOffset = bao.size();
 		bao.write(crashBin);
-		
+
 		int faviconDataOffset = bao.size();
 		bao.write(faviconBin);
-		
+
 		int loaderJSBinOffset = bao.size();
 		bao.write(loaderJSBin);
-		
+
 		int loaderWASMBinOffset = bao.size();
 		bao.write(loaderWASMBin);
-		
+
 		int JSPIUnavailableOffset = bao.size();
 		bao.write(JSPIUnavailableCompressed);
-		
+
 		int eagruntimeJSOffset = bao.size();
 		bao.write(eagruntimeJSCompressed);
-		
+
 		int classesWASMOffset = bao.size();
 		bao.write(classesWASMCompressed);
-		
+
 		int classesDeobfTEADBGOffset = 0;
 		if(classesDeobfTEADBGCompressed != null) {
 			classesDeobfTEADBGOffset = bao.size();
 			bao.write(classesDeobfTEADBGCompressed);
 		}
-		
+
 		int classesDeobfWASMOffset = 0;
 		if(classesDeobfWASMCompressed != null) {
 			classesDeobfWASMOffset = bao.size();
@@ -306,19 +308,19 @@ public class MakeWASMClientBundle {
 			struct.epkDataOffset = bao.size();
 			bao.write(struct.epkDataCompressed);
 		}
-		
+
 		byte[] finalPayload = bao.toByteArray();
-		
+
 		// Generate the fixed size header:
-		
+
 		byte[] epwHeaderDataArr = new byte[headerLen];
 		ByteBuffer epwHeaderData = ByteBuffer.wrap(epwHeaderDataArr).order(ByteOrder.LITTLE_ENDIAN);
-		
+
 		epwHeaderData.put(new byte[] { 'E', 'A', 'G', '$', 'W', 'A', 'S', 'M' });
 
 		epwHeaderData.putInt(8, 0); // Will be replaced with length
 		epwHeaderData.putInt(12, 0); // Will be replaced with CRC32
-		
+
 		epwHeaderData.putShort(16, (short)1); // EPW version major
 		epwHeaderData.putShort(18, (short)1); // EPW version minor
 
@@ -432,11 +434,11 @@ public class MakeWASMClientBundle {
 
 		System.out.println();
 		System.out.println("Calculating final CRC32...");
-		
+
 		CRC32 crc = new CRC32();
 		crc.update(epwHeaderDataArr, 16, headerLen - 16);
 		crc.update(finalPayload, 0, finalPayload.length);
-		
+
 		epwHeaderData.putInt(8, headerLen + finalPayload.length); // length
 		epwHeaderData.putInt(12, (int)crc.getValue()); // CRC32
 
