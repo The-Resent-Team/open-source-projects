@@ -23,6 +23,7 @@ import com.resentclient.oss.eaglercraft.build.tasks.common.CompileEpkTask
 import com.resentclient.oss.eaglercraft.build.tasks.js.MakeOfflineDownloadTask
 import com.resentclient.oss.eaglercraft.build.tasks.wasm.CompileWasmRuntimeTask
 import com.resentclient.oss.eaglercraft.build.tasks.wasm.MakeWasmClientBundleTask
+import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -59,6 +60,7 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
 
     val compileEpkTaskName: String = "compile${capitalizedName}Epk"
     val compileLanguageEpkTaskName: String = "compile${capitalizedName}LanguageEpk"
+    val assembleComponentsTaskName: String = "assemble${capitalizedName}Components"
     val makeOfflineDownloadTaskName: String = "make${capitalizedName}OfflineDownload"
 
     val compileEpkTask: TaskProvider<CompileEpkTask> =
@@ -79,13 +81,20 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
             task.epkCompression.convention(EaglercraftBuildEpkCompression.GZIP)
         }
 
+    val assembleComponentsTask: TaskProvider<DefaultTask> =
+        project.tasks.register(assembleComponentsTaskName, DefaultTask::class.java) { task ->
+            task.group = "eaglercraft build"
+
+            task.dependsOn(compileEpkTask)
+            task.dependsOn(compileLanguageEpkTask)
+        }
+
     val makeOfflineDownloadTask: TaskProvider<MakeOfflineDownloadTask> =
         project.tasks.register(makeOfflineDownloadTaskName, MakeOfflineDownloadTask::class.java) { task ->
             task.group = "eaglercraft build"
 
             task.dependsOn(suite.sourceGeneratorTaskName.get())
-            task.dependsOn(compileEpkTask)
-            task.dependsOn(compileLanguageEpkTask)
+            task.dependsOn(assembleComponentsTask)
 
             task.offlineDownloadTemplate.convention(jsConfig.offlineDownloadTemplate)
             task.javascriptSource.convention(jsConfig.sourceGeneratorOutput)
@@ -105,6 +114,7 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
     val compileEpkTaskName: String = "compile${capitalizedName}Epk"
     val compileLanguageEpkTaskName: String = "compile${capitalizedName}LanguageEpk"
     val compileEagRuntimeTaskName: String = "compile${capitalizedName}WasmRuntime"
+    val assembleComponentsTaskName: String = "assemble${capitalizedName}Components"
     val makeWasmClientBundleTaskName: String = "make${capitalizedName}WasmClientBundle"
 
     val compileEpkTask: TaskProvider<CompileEpkTask> =
@@ -139,14 +149,21 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
             task.runtimeOutput.convention(wasmConfig.runtimeOutput)
         }
 
+    val assembleComponentsTask: TaskProvider<DefaultTask> =
+        project.tasks.register(assembleComponentsTaskName, DefaultTask::class.java) { task ->
+            task.group = "eaglercraft build"
+
+            task.dependsOn(compileEpkTask)
+            task.dependsOn(compileLanguageEpkTask)
+            task.dependsOn(compileWasmRuntimeTask)
+        }
+
     val makeClientTask: TaskProvider<MakeWasmClientBundleTask> =
         project.tasks.register(makeWasmClientBundleTaskName, MakeWasmClientBundleTask::class.java) { task ->
             task.group = "eaglercraft build"
 
             task.dependsOn(suite.sourceGeneratorTaskName)
-            task.dependsOn(compileEpkTask)
-            task.dependsOn(compileLanguageEpkTask)
-            task.dependsOn(compileWasmRuntimeTask)
+            task.dependsOn(assembleComponentsTask)
 
             task.epwSource.convention(wasmConfig.epwSource)
             task.epwMeta.convention(wasmConfig.epwMeta)
