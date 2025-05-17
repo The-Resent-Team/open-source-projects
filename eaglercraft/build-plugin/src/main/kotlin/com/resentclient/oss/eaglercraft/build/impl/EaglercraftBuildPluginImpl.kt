@@ -87,13 +87,13 @@ private fun registerJsSuite(project: Project, suite: EaglercraftBuildSuiteExtens
 
             task.dependsOn(compileEpkTask)
             task.dependsOn(compileLanguageEpkTask)
+            task.dependsOn(suite.sourceGeneratorTaskName)
         }
 
     val makeOfflineDownloadTask: TaskProvider<MakeOfflineDownloadTask> =
         project.tasks.register(makeOfflineDownloadTaskName, MakeOfflineDownloadTask::class.java) { task ->
             task.group = "eaglercraft build"
 
-            task.dependsOn(suite.sourceGeneratorTaskName.get())
             task.dependsOn(assembleComponentsTask)
 
             task.offlineDownloadTemplate.convention(jsConfig.offlineDownloadTemplate)
@@ -156,13 +156,13 @@ private fun registerWasmSuite(project: Project, suite: EaglercraftBuildSuiteExte
             task.dependsOn(compileEpkTask)
             task.dependsOn(compileLanguageEpkTask)
             task.dependsOn(compileWasmRuntimeTask)
+            task.dependsOn(suite.sourceGeneratorTaskName)
         }
 
     val makeClientTask: TaskProvider<MakeWasmClientBundleTask> =
         project.tasks.register(makeWasmClientBundleTaskName, MakeWasmClientBundleTask::class.java) { task ->
             task.group = "eaglercraft build"
 
-            task.dependsOn(suite.sourceGeneratorTaskName)
             task.dependsOn(assembleComponentsTask)
 
             task.epwSource.convention(wasmConfig.epwSource)
